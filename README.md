@@ -1,2 +1,2 @@
-# Envio-indexer-templates
-Envio indexer templates for OpenZeppelin contract standards. 
+# Envio NounsDAO Template
+Envio indexer templates for the NounsDAO smart contracts. 
