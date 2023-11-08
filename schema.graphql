@@ -1,0 +1,118 @@
+type CreatedBid @entity(immutable: true) {
+  id: Bytes!
+  lastBiddder: Bytes! # address
+  lastBid: BigInt! # uint256
+  nftId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type SettledAndCreatedAuction @entity(immutable: true) {
+  id: Bytes!
+  winner: Bytes! # address
+  settleAuctionAmount: BigInt! # uint256
+  nftId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type WithdrawMoney @entity(immutable: true) {
+  id: Bytes!
+  winner: Bytes! # address
+  amount: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type SumBidAmount @entity {
+  id: String!
+  sumAmount: BigInt! # uint256
+}
+
+type TotalWinAmount @entity {
+  id: String!
+  totalWinAmount: BigInt! # uint256
+}
+
+#############################
+####### Token Metadata ######
+#############################
+
+type Token @entity {
+  " Address of the token, { Contract Address }-{ Token ID }  "
+  id: ID!
+
+  " ID of the token from the collection "
+  tokenID: BigInt!
+
+  " URI of the token "
+  tokenURI: String
+
+  " The owner for the token "
+  owner: Account!
+
+  " Timestamp of the token's mint "
+  mintTime: BigInt!
+
+  " Timestamp of the token's last updated timestamp "
+  lastUpdatedTime: BigInt!
+}
+
+
+##################################
+######## Account MetaData ########
+##################################
+
+# An account is a unique Ethereum address
+type Account @entity {
+  " Address of the account "
+  id: ID!
+
+  " Total number of unique tokens that this account holds "
+  tokenCount: BigInt!
+
+  " Tokens that this account holds "
+  tokens: [Token!]! @derivedFrom(field: "owner")
+
+  " Token transfers to this account "
+  transferTo: [Transfer!]! @derivedFrom(field: "to")
+
+  " Token transfers from this account "
+  transferFrom: [Transfer!]! @derivedFrom(field: "from")
+}
+
+###############################
+##### Transfer Event Data #####
+###############################
+
+type Transfer @entity (immutable: true) {
+  " { Contract ID }-{ Transaction hash }-{ Log index } "
+  id: ID!
+
+  " Transaction hash of the transaction that emitted this event "
+  hash: String!
+
+  " Event log index. For transactions that don't emit event, create arbitrary index starting from 0 "
+  logIndex: Int!
+
+  " Nonce of the transaction that emitted this event "
+  nonce: Int!
+
+  " ID of the token transferred "
+  tokenId: BigInt!
+
+  " Account that received the tokens "
+  to: Account!
+
+  " Account that sent the tokens "
+  from: Account!
+
+  " Block number of this event "
+  blockNumber: BigInt!
+
+  " Timestamp of this event "
+  timestamp: BigInt!
+}
