@@ -15,6 +15,18 @@ import {
   NounsAuctionContractContract_WithdrawMoney_handler,
 } from "../generated/src/Handlers.gen";
 
+import {
+  createdBidEntity,
+  settledAndCreatedAuctionEntity,
+  withdrawMoneyEntity,
+  sumBidAmountEntity,
+  totalWinAmountEntity,
+  tokenEntity,
+  accountEntity,
+  transferEntity,
+  
+} from "../generated/src/Types.gen";
+
 // import {
 //   MyAwesomeContractContract_AwesomeEvent_loader,
 //   MyAwesomeContractContract_AwesomeEvent_handler,
