@@ -2,8 +2,18 @@
  *Please refer to https://docs.envio.dev for a thorough guide on all Envio indexer features*
  */
 
-// code below is purely for demonstration purposes
-// please use it for reference only and delete it when you start working on your indexer
+import {
+  ERC721Contract_CapacityIncreased_loader,
+  ERC721Contract_CapacityIncreased_handler,
+  ERC721Contract_Transfer_loader,
+  ERC721Contract_Transfer_handler,
+  NounsAuctionContractContract_CreatedBid_loader,
+  NounsAuctionContractContract_CreatedBid_handler,
+  NounsAuctionContractContract_SettledAndCreatedAuction_loader,
+  NounsAuctionContractContract_SettledAndCreatedAuction_handler,
+  NounsAuctionContractContract_WithdrawMoney_loader,
+  NounsAuctionContractContract_WithdrawMoney_handler,
+} from "../generated/src/Handlers.gen";
 
 // import {
 //   MyAwesomeContractContract_AwesomeEvent_loader,
