@@ -147,7 +147,19 @@ NounsAuctionHouseContract_AuctionCreated_handler(({ event, context }) => {
     approvalsCount: currentSummaryEntity.auctionCount + BigInt(1),
   };
 
+  let auctionEntity: AuctionEntity = {
+    id: event.transactionHash + event.logIndex.toString(),
+    noun: event.params.nounId.toString(),
+    amount: event.params.nounId.valueOf(),
+    startTime: event.params.startTime.valueOf(),
+    endTime: event.params.endTime.valueOf(),
+    bidder: "0x0000000000000000000000000000000000000000",
+    settled: false,
+    eventsSummary: GLOBAL_EVENTS_SUMMARY_KEY,
+  };
+
   context.EventsSummary.set(nextSummaryEntity);
+  context.Auction.set(auctionEntity);
 });
 
 NounsAuctionHouseContract_AuctionBid_loader(({ event, context }) => {
