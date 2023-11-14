@@ -221,7 +221,28 @@ NounsDAOContract_ProposalCreatedWithRequirements_handler(({ event, context }) =>
     approvalsCount: currentSummaryEntity.proposalCount + BigInt(1),
   };
 
+  let proposalEntity: ProposalEntity = {
+    id: event.transactionHash + event.logIndex.toString(),
+    proposer: event.params.proposer.toString(),
+    targets: event.params.targets,
+    values: event.params.values,
+    signatures: event.params.signatures,
+    calldatas: event.params.calldatas,
+    startBlock: event.params.startBlock.valueOf(),
+    endBlock: event.params.endBlock.valueOf(),
+    createdBlock: BigInt(event.blockNumber.valueOf()),
+    forVotes: BigInt(0),
+    againstVotes: BigInt(0),
+    abstainVotes: BigInt(0),
+    description: event.params.description,
+    status: BigInt(0),
+    executionETA: BigInt(0),
+    onTimelockV1: false,
+    eventsSummary: GLOBAL_EVENTS_SUMMARY_KEY,
+  };
+
   context.EventsSummary.set(nextSummaryEntity);
+  context.Proposal.set(proposalEntity);
 });
 
 NounsDAOContract_ProposalCreatedOnTimelockV1_loader(({ event, context }) => {
@@ -237,6 +258,26 @@ NounsDAOContract_ProposalCreatedOnTimelockV1_handler(({ event, context }) => {
   let nextSummaryEntity = {
     ...currentSummaryEntity,
     approvalsCount: currentSummaryEntity.proposalCount + BigInt(1),
+  };
+
+  let proposalEntity: ProposalEntity = {
+    id: event.transactionHash + event.logIndex.toString(),
+    proposer: event.params.proposer.toString(),
+    targets: event.params.targets,
+    values: event.params.values,
+    signatures: event.params.signatures,
+    calldatas: event.params.calldatas,
+    startBlock: event.params.startBlock.valueOf(),
+    endBlock: event.params.endBlock.valueOf(),
+    createdBlock: BigInt(event.blockNumber.valueOf()),
+    forVotes: BigInt(0),
+    againstVotes: BigInt(0),
+    abstainVotes: BigInt(0),
+    description: event.params.description,
+    status: BigInt(0),
+    executionETA: BigInt(0),
+    onTimelockV1: true,
+    eventsSummary: GLOBAL_EVENTS_SUMMARY_KEY,
   };
 
   context.EventsSummary.set(nextSummaryEntity);
@@ -634,7 +675,18 @@ NounsTokenContract_Transfer_handler(({ event, context }) => {
     approvalsCount: currentSummaryEntity.transferEventCount + BigInt(1),
   };
 
+  let transferEventEntity: TransferEventEntity = {    
+    id: event.transactionHash + event.logIndex.toString(),
+    noun: event.params.tokenId.toString(),
+    previousHolder: event.params.from.toString(),
+    newHolder: event.params.to.toString(),
+    blockNumber: BigInt(event.blockNumber.valueOf()),
+    blockTimestamp: BigInt(event.blockTimestamp.valueOf()),
+    eventsSummary: GLOBAL_EVENTS_SUMMARY_KEY,
+  };
+
   context.EventsSummary.set(nextSummaryEntity);
+  context.TransferEvent.set(transferEventEntity);
 });
 
 // MyAwesomeContractContract_AwesomeEvent_handler(({ event, context }) => {
