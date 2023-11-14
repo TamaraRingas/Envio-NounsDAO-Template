@@ -621,7 +621,15 @@ NounsTokenContract_NounCreated_handler(({ event, context }) => {
     approvalsCount: currentSummaryEntity.nounCount + BigInt(1),
   };
 
+  let nounEntity: NounEntity = {
+    id: event.params.tokenId.toString(),
+    seed: event.params.seed.toString(),
+    owner: event.srcAddress.toString(),
+    eventsSummary: GLOBAL_EVENTS_SUMMARY_KEY,
+  };
+
   context.EventsSummary.set(nextSummaryEntity);
+  context.Noun.set(nounEntity);
 });
 
 NounsTokenContract_DelegateChanged_loader(({ event, context }) => {
