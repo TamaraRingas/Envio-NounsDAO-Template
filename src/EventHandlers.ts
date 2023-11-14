@@ -609,12 +609,30 @@ NounsDAODataContract_FeedbackSent_loader(({ event, context }) => {
   context.EventsSummary.load(GLOBAL_EVENTS_SUMMARY_KEY);
 });
 
+// Still WIP!
 NounsDAODataContract_FeedbackSent_handler(({ event, context }) => {
   let summary = context.EventsSummary.get(GLOBAL_EVENTS_SUMMARY_KEY);
+  let voter = context.ProposalFeedback.getVoter(event);
 
   let currentSummaryEntity: EventsSummaryEntity =
     summary ?? INITIAL_EVENTS_SUMMARY;
   
+  let nextSummaryEntity = {
+    ...currentSummaryEntity,
+    approvalsCount: currentSummaryEntity.proposalFeedbackCount + BigInt(1),
+  };
+
+  let feedbackEntity: ProposalFeedbackEntity = {
+    id: event.transactionHash + event.logIndex.toString(),
+    createdTimestamp: BigInt(event.blockTimestamp.valueOf()),
+    createdBlock: BigInt(event.blockNumber.valueOf()),
+    proposal: event.params.proposalId.toString(),
+    voter: event.srcAddress.toString(),
+    votes: voter.delegatedVotes,
+    supportDetailed: Number(event.params.support.valueOf()),
+    reason: event.params.reason,
+    eventsSummary: GLOBAL_EVENTS_SUMMARY_KEY,
+  };
 });
 
 NounsDAODataContract_CandidateFeedbackSent_loader(({ event, context }) => {
