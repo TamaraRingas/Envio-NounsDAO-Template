@@ -579,6 +579,29 @@ NounsDAODataContract_SignatureAdded_handler(({ event, context }) => {
 
   let currentSummaryEntity: EventsSummaryEntity =
     summary ?? INITIAL_EVENTS_SUMMARY;
+
+  let nextSummaryEntity = {
+    ...currentSummaryEntity,
+    approvalsCount: currentSummaryEntity.proposalCandidateSignatureCount + BigInt(1),
+  };
+
+  let signatureEntity: ProposalCandidateSignatureEntity = {
+    id: event.transactionHash + event.logIndex.toString(),
+    content: event.params.slug,
+    signer: event.params.signer,
+    sig: event.params.sig,
+    expirationTimestamp: event.params.expirationTimestamp.valueOf(),
+    encodedProposalHash: event.params.encodedPropHash,
+    sigDigest: event.params.sigDigest,
+    reason: event.params.reason,
+    canceled: false,
+    createdTimestamp: BigInt(event.blockTimestamp.valueOf()),
+    createdBlock: BigInt(event.blockNumber.valueOf()),
+    eventsSummary: GLOBAL_EVENTS_SUMMARY_KEY,
+  };
+
+  context.EventsSummary.set(nextSummaryEntity);
+  context.ProposalCandidateSignature.set(signatureEntity);
   
 });
 
