@@ -174,7 +174,7 @@ NounsAuctionHouseContract_AuctionBid_handler(({ event, context }) => {
 
   let nextSummaryEntity = {
     ...currentSummaryEntity,
-    approvalsCount: currentSummaryEntity.bidCount + BigInt(1),
+    bidCount: currentSummaryEntity.bidCount + BigInt(1),
   };
 
   context.EventsSummary.set(nextSummaryEntity);
@@ -567,6 +567,11 @@ NounsDAODataContract_ProposalCandidateCanceled_handler(({ event, context }) => {
 
   let currentSummaryEntity: EventsSummaryEntity =
     summary ?? INITIAL_EVENTS_SUMMARY;
+
+  let nextSummaryEntity = {
+    ...currentSummaryEntity,
+    proposalCandidatesCount: currentSummaryEntity.proposalCandidateCount - BigInt(1),
+  };
   
 });
 
@@ -582,7 +587,7 @@ NounsDAODataContract_SignatureAdded_handler(({ event, context }) => {
 
   let nextSummaryEntity = {
     ...currentSummaryEntity,
-    approvalsCount: currentSummaryEntity.proposalCandidateSignatureCount + BigInt(1),
+    proposalCandidateSignatureCount: currentSummaryEntity.proposalCandidateSignatureCount + BigInt(1),
   };
 
   let signatureEntity: ProposalCandidateSignatureEntity = {
@@ -619,7 +624,7 @@ NounsDAODataContract_FeedbackSent_handler(({ event, context }) => {
   
   let nextSummaryEntity = {
     ...currentSummaryEntity,
-    approvalsCount: currentSummaryEntity.proposalFeedbackCount + BigInt(1),
+    proposalFeedbackCount: currentSummaryEntity.proposalFeedbackCount + BigInt(1),
   };
 
   let feedbackEntity: ProposalFeedbackEntity = {
@@ -659,7 +664,7 @@ NounsTokenContract_NounCreated_handler(({ event, context }) => {
 
   let nextSummaryEntity = {
     ...currentSummaryEntity,
-    approvalsCount: currentSummaryEntity.nounCount + BigInt(1),
+    nounCount: currentSummaryEntity.nounCount + BigInt(1),
   };
 
   let nounEntity: NounEntity = {
@@ -682,11 +687,6 @@ NounsTokenContract_DelegateChanged_handler(({ event, context }) => {
 
   let currentSummaryEntity: EventsSummaryEntity =
   summary ?? INITIAL_EVENTS_SUMMARY;
-
-  // let nextSummaryEntity = {
-  //   ...currentSummaryEntity,
-  //   approvalsCount: currentSummaryEntity.delegateCount + BigInt(1),
-  // };
 
   // context.EventsSummary.set(nextSummaryEntity);
 });
@@ -721,7 +721,7 @@ NounsTokenContract_Transfer_handler(({ event, context }) => {
 
   let nextSummaryEntity = {
     ...currentSummaryEntity,
-    approvalsCount: currentSummaryEntity.transferEventCount + BigInt(1),
+    transferEventCount: currentSummaryEntity.transferEventCount + BigInt(1),
   };
 
   let transferEventEntity: TransferEventEntity = {    
