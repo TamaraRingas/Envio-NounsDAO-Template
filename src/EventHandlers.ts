@@ -502,7 +502,14 @@ NounsDAOContract_SignatureCancelled_handler(({ event, context }) => {
   let summary = context.EventsSummary.get(GLOBAL_EVENTS_SUMMARY_KEY);
 
   let currentSummaryEntity: EventsSummaryEntity = summary ?? INITIAL_EVENTS_SUMMARY;
-  
+
+  let nextSummaryEntity = {
+    ...currentSummaryEntity,
+    approvalsCount: currentSummaryEntity.voteCount + BigInt(1),
+  };
+
+  context.EventsSummary.set(nextSummaryEntity);
+  context.ProposalCandidateSignature.delete(event.srcAddress.toString());
 });
 
 NounsDAOContract_EscrowedToFork_loader(({ event, context }) => {
