@@ -606,7 +606,9 @@ NounsDAODataContract_ProposalCandidateCanceled_handler(({ event, context }) => {
     ...currentSummaryEntity,
     proposalCandidatesCount: currentSummaryEntity.proposalCandidateCount - BigInt(1),
   };
-  
+
+  context.EventsSummary.set(nextSummaryEntity);
+  context.ProposalCandidate.delete(event.srcAddress.toString());
 });
 
 NounsDAODataContract_SignatureAdded_loader(({ event, context }) => {
