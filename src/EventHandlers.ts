@@ -287,8 +287,7 @@ NounsDAOContract_ProposalCreatedOnTimelockV1_handler(({ event, context }) => {
 
   let proposalEntity: ProposalEntity = {
     id: event.transactionHash + event.logIndex.toString(),
-    proposer: event.params.
-    targets: event.params.targets,
+    proposer: event.params.proposer.toString(),
     values: event.params.values,
     signatures: event.params.signatures,
     calldatas: event.params.calldatas,
@@ -320,10 +319,11 @@ NounsDAOContract_ProposalCanceled_handler(({ event, context }) => {
 
   let nextSummaryEntity = {
     ...currentSummaryEntity,
-    approvalsCount: currentSummaryEntity.proposalCount - BigInt(1),
+    proposalsCount: currentSummaryEntity.proposalCount - BigInt(1),
   };
 
   context.EventsSummary.set(nextSummaryEntity);
+  context.Proposal.delete(event.srcAddress.toString());
 });
 
 NounsDAOContract_ProposalVetoed_loader(({ event, context }) => {
@@ -332,11 +332,12 @@ NounsDAOContract_ProposalVetoed_loader(({ event, context }) => {
 
 NounsDAOContract_ProposalVetoed_handler(({ event, context }) => {
   let summary = context.EventsSummary.get(GLOBAL_EVENTS_SUMMARY_KEY);
-  let proposal = context.Proposal.get();
+  let proposal = summary!
 
   let currentSummaryEntity: EventsSummaryEntity =
     summary ?? INITIAL_EVENTS_SUMMARY;
 
+  proposal!.veteoedBlock = BigInt(event.blockNumber.valueOf());
   
 });
 
@@ -351,7 +352,7 @@ NounsDAOContract_ProposalQueued_handler(({ event, context }) => {
 
   // let nextSummaryEntity = {
   //   ...currentSummaryEntity,
-  //   approvalsCount: currentSummaryEntity.proposalCount - BigInt(1),
+  //   proposalsCount: currentSummaryEntity.proposalCount - BigInt(1),
   // };
 
   // context.EventsSummary.set(nextSummaryEntity);
