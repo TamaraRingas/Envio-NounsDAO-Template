@@ -151,6 +151,7 @@ NounsAuctionHouseContract_AuctionCreated_handler(({ event, context }) => {
     id: event.transactionHash + event.logIndex.toString(),
     noun: event.params.nounId.toString(),
     amount: event.params.nounId.valueOf(),
+    bidder: "",
     startTime: event.params.startTime.valueOf(),
     endTime: event.params.endTime.valueOf(),
     settled: false,
@@ -286,7 +287,7 @@ NounsDAOContract_ProposalCreatedOnTimelockV1_handler(({ event, context }) => {
 
   let proposalEntity: ProposalEntity = {
     id: event.transactionHash + event.logIndex.toString(),
-    proposer: event.params.proposer.toString(),
+    proposer: event.params.
     targets: event.params.targets,
     values: event.params.values,
     signatures: event.params.signatures,
@@ -331,6 +332,7 @@ NounsDAOContract_ProposalVetoed_loader(({ event, context }) => {
 
 NounsDAOContract_ProposalVetoed_handler(({ event, context }) => {
   let summary = context.EventsSummary.get(GLOBAL_EVENTS_SUMMARY_KEY);
+  let proposal = context.Proposal.get();
 
   let currentSummaryEntity: EventsSummaryEntity =
     summary ?? INITIAL_EVENTS_SUMMARY;
@@ -641,7 +643,6 @@ NounsDAODataContract_FeedbackSent_loader(({ event, context }) => {
 // Still WIP!
 NounsDAODataContract_FeedbackSent_handler(({ event, context }) => {
   let summary = context.EventsSummary.get(GLOBAL_EVENTS_SUMMARY_KEY);
-  let voter = context.ProposalFeedback.getVoter(event);
 
   let currentSummaryEntity: EventsSummaryEntity =
     summary ?? INITIAL_EVENTS_SUMMARY;
@@ -656,8 +657,7 @@ NounsDAODataContract_FeedbackSent_handler(({ event, context }) => {
     createdTimestamp: BigInt(event.blockTimestamp.valueOf()),
     createdBlock: BigInt(event.blockNumber.valueOf()),
     proposal: event.params.proposalId.toString(),
-    voter: event.srcAddress.toString(),
-    votes: voter.delegatedVotes,
+    voter: context.Proposal.
     supportDetailed: Number(event.params.support.valueOf()),
     reason: event.params.reason,
     eventsSummary: GLOBAL_EVENTS_SUMMARY_KEY,
