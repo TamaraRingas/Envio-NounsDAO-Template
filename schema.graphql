@@ -250,7 +250,7 @@ type Proposal @entity {
   proposer: Delegate!
 
   "Delegates that signed on this proposal to get it over the proposal threshold"
-  signers: Delegate!
+  signers: Delegate
 
   "Targets data for the change"
   targets: [Bytes!]
@@ -313,7 +313,7 @@ type Proposal @entity {
   executionETA: BigInt
 
   "Votes associated to this proposal"
-  votes: [Vote!]! @derivedFrom(field: "proposal")
+  votes: [Vote!] @derivedFrom(field: "proposal")
 
   "Total supply when this proposal was created"
   totalSupply: BigInt!
@@ -337,7 +337,7 @@ type Proposal @entity {
   updatePeriodEndBlock: BigInt!
 
   "Feedback posts associated to this proposal"
-  feedbackPosts: [ProposalFeedback!]! @derivedFrom(field: "proposal")
+  feedbackPosts: [ProposalFeedback!] @derivedFrom(field: "proposal")
 
   "True if the proposal was created via proposeOnTimelockV1"
   onTimelockV1: Boolean
