@@ -153,7 +153,6 @@ NounsAuctionHouseContract_AuctionCreated_handler(({ event, context }) => {
     amount: event.params.nounId.valueOf(),
     startTime: event.params.startTime.valueOf(),
     endTime: event.params.endTime.valueOf(),
-    bidder: "0x0000000000000000000000000000000000000000",
     settled: false,
     eventsSummary: GLOBAL_EVENTS_SUMMARY_KEY,
   };
@@ -226,18 +225,42 @@ NounsDAOContract_ProposalCreatedWithRequirements_handler(({ event, context }) =>
     proposer: event.params.proposer.toString(),
     targets: event.params.targets,
     values: event.params.values,
+    signers: " ",
     signatures: event.params.signatures,
     calldatas: event.params.calldatas,
+    createdTimestamp: BigInt(event.blockTimestamp.valueOf()),
+    createdBlock: BigInt(event.blockNumber.valueOf()),
+    lastUpdatedTimestamp: BigInt(event.blockTimestamp.valueOf()),
+    lastUpdatedBlock: BigInt(event.blockNumber.valueOf()),
+    createdTransactionHash: event.transactionHash,
     startBlock: event.params.startBlock.valueOf(),
     endBlock: event.params.endBlock.valueOf(),
-    createdBlock: BigInt(event.blockNumber.valueOf()),
+    proposalThreshold: event.params.proposalThreshold.valueOf(),
+    quorumVotes: event.params.quorumVotes.valueOf(),
     forVotes: BigInt(0),
     againstVotes: BigInt(0),
     abstainVotes: BigInt(0),
+    title: event.params.description.slice(0, 32),
     description: event.params.description,
     status: BigInt(0),
     executionETA: BigInt(0),
+    totalSupply: BigInt(0),
+    adjustedTotalSupply: BigInt(0),
+    minQuorumVotesBPS: 0,
+    maxQuorumVotesBPS: 0,
+    quorumCoefficient: BigInt(0),
+    objectionPeriodEndBlock: BigInt(0),
+    updatePeriodEndBlock: BigInt(0),
+    voteSnapshotBlock: BigInt(0),
     onTimelockV1: false,
+    queuedBlock: BigInt(0),
+    queuedTimestamp: BigInt(0),
+    canceledBlock: BigInt(0),
+    canceledTimestamp: BigInt(0),
+    executedBlock: BigInt(0),
+    vetoedBlock: BigInt(0),
+    vetoedTimestamp: BigInt(0),
+    executedTimestamp: BigInt(0),
     eventsSummary: GLOBAL_EVENTS_SUMMARY_KEY,
   };
 
@@ -251,6 +274,7 @@ NounsDAOContract_ProposalCreatedOnTimelockV1_loader(({ event, context }) => {
 
 NounsDAOContract_ProposalCreatedOnTimelockV1_handler(({ event, context }) => {
   let summary = context.EventsSummary.get(GLOBAL_EVENTS_SUMMARY_KEY);
+
 
   let currentSummaryEntity: EventsSummaryEntity =
     summary ?? INITIAL_EVENTS_SUMMARY;
