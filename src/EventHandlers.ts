@@ -650,7 +650,6 @@ NounsDAODataContract_FeedbackSent_loader(({ event, context }) => {
   context.EventsSummary.load(GLOBAL_EVENTS_SUMMARY_KEY);
 });
 
-// Still WIP!
 NounsDAODataContract_FeedbackSent_handler(({ event, context }) => {
   let summary = context.EventsSummary.get(GLOBAL_EVENTS_SUMMARY_KEY);
 
@@ -667,11 +666,15 @@ NounsDAODataContract_FeedbackSent_handler(({ event, context }) => {
     createdTimestamp: BigInt(event.blockTimestamp.valueOf()),
     createdBlock: BigInt(event.blockNumber.valueOf()),
     proposal: event.params.proposalId.toString(),
-    voter: context.Proposal.
+    voter: event.srcAddress.toString(),
+    votes: BigInt(0),
     supportDetailed: Number(event.params.support.valueOf()),
     reason: event.params.reason,
     eventsSummary: GLOBAL_EVENTS_SUMMARY_KEY,
   };
+
+  context.EventsSummary.set(nextSummaryEntity);
+  context.ProposalFeedback.set(feedbackEntity);
 });
 
 NounsDAODataContract_CandidateFeedbackSent_loader(({ event, context }) => {
