@@ -686,7 +686,26 @@ NounsDAODataContract_CandidateFeedbackSent_handler(({ event, context }) => {
 
   let currentSummaryEntity: EventsSummaryEntity =
     summary ?? INITIAL_EVENTS_SUMMARY;
-  
+
+  let nextSummaryEntity = {
+    ...currentSummaryEntity,
+    candidateFeedbackCount: currentSummaryEntity.candidateFeedbackCount + BigInt(1),
+  };
+
+  let candidateFeedbackEntity: CandidateFeedbackEntity = {
+    id: event.transactionHash + event.logIndex.toString(),
+    createdTimestamp: BigInt(event.blockTimestamp.valueOf()),
+    createdBlock: BigInt(event.blockNumber.valueOf()),
+    candidate: event.srcAddress.toString(),
+    voter: event.srcAddress.toString(),
+    supportDetailed: Number(event.params.support.valueOf()),
+    votes: BigInt(0),
+    reason: event.params.reason,
+    eventsSummary: GLOBAL_EVENTS_SUMMARY_KEY
+  };
+
+  context.EventsSummary.set(nextSummaryEntity);
+  context.CandidateFeedback.set(candidateFeedbackEntity);
 });
 
 NounsTokenContract_NounCreated_loader(({ event, context }) => {
